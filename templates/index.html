@@ -76,8 +76,8 @@
         {% for col in range(ncols) %}
            
             <div class="col-md-6 portfolio-item">
-                <form name="color_button" method='GET' class="form-inline">
-                    <select name="model_name" class="form-control">
+                <form name="model_name_select" method='GET' class="form-inline">
+                    <select name="model_name_{{row}}_{{col}}" class="form-control">
                         {% for m in model_names %}
                             {% if m == model_plots[row][col]['name'] %}
                                 <option selected="selected" value="{{ m }}">{{ m }}</option>

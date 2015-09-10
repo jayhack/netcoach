@@ -15,6 +15,7 @@ from db import DBClient, Record
 app = flask.Flask(__name__)
 dbclient = DBClient()
 nrows, ncols = 3, 2
+plot_names = [[None, None], [None, None], [None, None]]
 
 
 def make_figure(model_tracker):
@@ -63,17 +64,21 @@ def make_model_plot(model_name):
 def plot():
     """Grabs all active models and plots them"""
 
-    plot_names = [[None, None], [None, None], [None, None]]
-    plot_names[0][0] = 'linear_model'
-    plot_names[0][1] = 'quadratic_model'
+    #=====[ Step 1: parse args ]=====
+    args = flask.request.args
+    for k, v in args.items():
+        splits = k.split('_')
+        row, col = int(splits[-2]), int(splits[-1])
+        plot_names[row][col] = v
 
+    #=====[ Step 2: assemble plots ]=====
     model_plots = [[None, None], [None, None], [None, None]]
     for i in range(nrows):
         for j in range(ncols):
-                print i, j, plot_names[i][j]
                 model_plots[i][j] = make_model_plot(plot_names[i][j])
 
 
+    #=====[ Step 3: make templates ]=====
     # Configure resources to include BokehJS inline in the document.
     # For more details see:
     #   http://bokeh.pydata.org/en/latest/docs/reference/resources_embedding.html#module-bokeh.resources
@@ -83,8 +88,6 @@ def plot():
         js_files=INLINE.js_files + ['js'],
         css_files=INLINE.css_files + ['css'],
     )
-
-
     html = flask.render_template(
         'index.html',
         plot_resources=plot_resources,
