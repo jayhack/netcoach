@@ -29,7 +29,12 @@ def plot():
     loss_records = mt.get_records('loss')
     acc_records = mt.get_records('accuracy')
 
-    fig = figure(title='{} Loss'.format(model_name))
+    fig = figure(
+                # title='{}'.format(model_name),
+                tools='pan,wheel_zoom,reset',
+                plot_width=500,
+                plot_height=300
+                )
     fig.line(range(len(loss_records)), loss_records['data'])
     fig.line(range(len(acc_records)), acc_records['data'])
 
