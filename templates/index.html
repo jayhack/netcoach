@@ -25,7 +25,8 @@
     <![endif]-->
     {{ plot_resources|indent(4)|safe }}
 
-    {{ plot_script|indent(4)|safe }}
+    {{ plot_scripts[0][0]|indent(4)|safe }}
+    {{ plot_scripts[1][1]|indent(4)|safe }} 
 
 </head>
 
@@ -68,12 +69,8 @@
 
         <!-- Projects Row -->
         <div class="row">
+           
             <div class="col-md-6 portfolio-item">
-
-
-
-
-
                 <form name="color_button" method='GET'>
                     <select name="model_name">
                         {% for m in model_names %}
@@ -82,27 +79,32 @@
                     </select>
                     <button type="submit">update</button>
                 </form>
-                {{ plot_div|indent(4)|safe }}
-
-
-
-
+                {{ plot_divs[0][0]|indent(4)|safe }}
 
 
                 <h3>
-                    <a href="#">Project One</a>
+                    <a href="#">{{plot_names[0][0]}}</a>
                 </h3>
                 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam viverra euismod odio, gravida pellentesque urna varius vitae.</p>
             </div>
+
             <div class="col-md-6 portfolio-item">
-                <a href="#">
-                    <img class="img-responsive" src="http://placehold.it/700x400" alt="">
-                </a>
+                <form name="color_button" method='GET'>
+                    <select name="model_name">
+                        {% for m in model_names %}
+                        <option value="{{ m }}">{{ m }}</option>
+                        {% endfor %}            
+                    </select>
+                    <button type="submit">update</button>
+                </form>
+                {{ plot_divs[0][1]|indent(4)|safe }}
+
                 <h3>
-                    <a href="#">Project Two</a>
+                    <a href="#">{{plot_names[0][1]}}</a>
                 </h3>
                 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam viverra euismod odio, gravida pellentesque urna varius vitae.</p>
             </div>
+
         </div>
         <!-- /.row -->
 

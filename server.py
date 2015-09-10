@@ -15,6 +15,13 @@ from db import DBClient, Record
 app = flask.Flask(__name__)
 dbclient = DBClient()
 
+#=====[ Initialize ]=====
+nrows, ncols = 3, 2
+plot_names = [[None]*ncols]*nrows
+figs = [[None]*ncols]*nrows
+scripts = [[None]*ncols]*nrows
+divs = [[None]*ncols]*nrows
+
 
 def make_figure(model_name):
     """makes and returns a figure"""
@@ -40,24 +47,9 @@ def make_figure(model_name):
 @app.route("/")
 def plot():
     """Grabs all active models and plots them"""
-    
 
-
-    # model_name = 'my_first_model'
-    # mt = dbclient.get_model_tracker(model_name)
-    # loss_records = mt.get_records('loss')
-    # acc_records = mt.get_records('accuracy')
-
-    # fig = figure(
-    #             # title='{}'.format(model_name),
-    #             tools='pan,wheel_zoom,reset',
-    #             plot_width=500,
-    #             plot_height=300
-    #             )
-    # fig.line(range(len(loss_records)), loss_records['data'])
-    # fig.line(range(len(acc_records)), acc_records['data'])
-
-    fig = make_figure('quadratic_model')
+    plot_names[0][0] = 'linear_model'
+    plot_names[0][1] = 'quadratic_model'
 
     # Configure resources to include BokehJS inline in the document.
     # For more details see:
@@ -69,13 +61,20 @@ def plot():
         css_files=INLINE.css_files + ['css'],
     )
 
-    print INLINE.css_files + ['css']
     # For more details see:
     #   http://bokeh.pydata.org/en/latest/docs/user_guide/embedding.html#components
-    script, div = components(fig, INLINE)
+    for i in range(nrows):
+        for j in range(ncols):
+            if not plot_names[i][j] is None:
+                print plot_names[i][j]
+                figs[i][j] = make_figure(plot_names[i][j])
+                scripts[i][j], divs[i][j] = components(figs[i][j], INLINE)
+
+
     html = flask.render_template(
         'index.html',
-        plot_script=script, plot_div=div, plot_resources=plot_resources,
+        plot_scripts=scripts, plot_divs=divs, plot_resources=plot_resources,
+        plot_names=plot_names,
         model_names=dbclient.get_model_names()
     )
     return encode_utf8(html)

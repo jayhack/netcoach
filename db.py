@@ -120,7 +120,7 @@ class DBClient(object):
     def get_model_names(self):
         """returns all unique model names"""
         names = [x[0] for x in self.session.query(Model.name).all()]
-        return set(names)
+        return list(set(names))
 
     def get_model_tracker(self, name):
         """returns named model tracker or raises NameError"""
