@@ -25,8 +25,11 @@
     <![endif]-->
     {{ plot_resources|indent(4)|safe }}
 
-    {{ plot_scripts[0][0]|indent(4)|safe }}
-    {{ plot_scripts[1][1]|indent(4)|safe }} 
+    {% for i in range(nrows) %}
+        {% for j in range(ncols) %}
+            {{ model_plots[i][j]['script']|indent(4)|safe }}
+        {% endfor %}
+    {% endfor %}
 
 </head>
 
@@ -67,92 +70,35 @@
     <!-- Page Content -->
     <div class="container">
 
-        <!-- Projects Row -->
+    {% for row in range(nrows) %}
         <div class="row">
+
+        {% for col in range(ncols) %}
            
             <div class="col-md-6 portfolio-item">
                 <form name="color_button" method='GET'>
                     <select name="model_name">
                         {% for m in model_names %}
-                        <option value="{{ m }}">{{ m }}</option>
+                            {% if m == model_plots[row][col]['name'] %}
+                                <option selected="selected" value="{{ m }}">{{ m }}</option>
+                            {% else %}
+                                <option value="{{ m }}">{{ m }}</option>
+                            {% endif %}
                         {% endfor %}            
                     </select>
                     <button type="submit">update</button>
                 </form>
-                {{ plot_divs[0][0]|indent(4)|safe }}
-
-
+                {{ model_plots[row][col]['div']|indent(4)|safe }}
                 <h3>
-                    <a href="#">{{plot_names[0][0]}}</a>
+                    <a href="#">{{model_plots[row][col]['name']}}</a>
                 </h3>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam viverra euismod odio, gravida pellentesque urna varius vitae.</p>
+                <p>{{model_plots[row][col]['comment']}}</p>
             </div>
 
-            <div class="col-md-6 portfolio-item">
-                <form name="color_button" method='GET'>
-                    <select name="model_name">
-                        {% for m in model_names %}
-                        <option value="{{ m }}">{{ m }}</option>
-                        {% endfor %}            
-                    </select>
-                    <button type="submit">update</button>
-                </form>
-                {{ plot_divs[0][1]|indent(4)|safe }}
-
-                <h3>
-                    <a href="#">{{plot_names[0][1]}}</a>
-                </h3>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam viverra euismod odio, gravida pellentesque urna varius vitae.</p>
-            </div>
+        {% endfor %}
 
         </div>
-        <!-- /.row -->
-
-        <!-- Projects Row -->
-        <div class="row">
-            <div class="col-md-6 portfolio-item">
-                <a href="#">
-                    <img class="img-responsive" src="http://placehold.it/700x400" alt="">
-                </a>
-                <h3>
-                    <a href="#">Project Three</a>
-                </h3>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam viverra euismod odio, gravida pellentesque urna varius vitae.</p>
-            </div>
-            <div class="col-md-6 portfolio-item">
-                <a href="#">
-                    <img class="img-responsive" src="http://placehold.it/700x400" alt="">
-                </a>
-                <h3>
-                    <a href="#">Project Four</a>
-                </h3>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam viverra euismod odio, gravida pellentesque urna varius vitae.</p>
-            </div>
-        </div>
-        <!-- /.row -->
-
-        <!-- Projects Row -->
-        <div class="row">
-            <div class="col-md-6 portfolio-item">
-                <a href="#">
-                    <img class="img-responsive" src="http://placehold.it/700x400" alt="">
-                </a>
-                <h3>
-                    <a href="#">Project Five</a>
-                </h3>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam viverra euismod odio, gravida pellentesque urna varius vitae.</p>
-            </div>
-            <div class="col-md-6 portfolio-item">
-                <a href="#">
-                    <img class="img-responsive" src="http://placehold.it/700x400" alt="">
-                </a>
-                <h3>
-                    <a href="#">Project Six</a>
-                </h3>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam viverra euismod odio, gravida pellentesque urna varius vitae.</p>
-            </div>
-        </div>
-        <!-- /.row -->
+    {% endfor %}
 
         <hr>
 

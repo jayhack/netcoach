@@ -60,14 +60,13 @@ class ModelTracker(object):
         self.session = Session()
 
         #=====[ Step 2: grab model ]=====
-        try:
+        prevs = self.session.query(Model).filter(Model.name.in_([name]))
+        if prevs.count() == 0:
             self.model = Model(name=name, comment=comment)
             self.session.add(self.model)
             self.session.commit()
-        except:
-            self.model = self.session.query(Model) \
-                            .filter(Model.name.in_([name])) \
-                            .first()
+        else:
+            self.model = prevs.first()
 
         #=====[ Step 3: set local ]=====
         self.name = self.model.name
