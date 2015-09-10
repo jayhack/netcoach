@@ -12,7 +12,7 @@ from bokeh.util.string import encode_utf8
 
 from db import DBClient, Record
 
-app = flask.Flask(__name__, static_url_path='/templates')
+app = flask.Flask(__name__)
 dbclient = DBClient()
 
 
@@ -23,11 +23,15 @@ def plot():
     print args
 
     dbclient = DBClient()
-    model_name = 'my_model'
-    loss_df = dbclient.get_records(model_name, 'loss')
+    
+    model_name = 'my_first_model'
+    mt = dbclient.get_model_tracker(model_name)
+    loss_records = mt.get_records('loss')
+    acc_records = mt.get_records('accuracy')
 
     fig = figure(title='{} Loss'.format(model_name))
-    fig.line(range(len(loss_df)), loss_df['data'])
+    fig.line(range(len(loss_records)), loss_records['data'])
+    fig.line(range(len(acc_records)), acc_records['data'])
 
     # Configure resources to include BokehJS inline in the document.
     # For more details see:
