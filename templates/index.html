@@ -77,7 +77,8 @@
            
             <div class="col-md-6 portfolio-item">
                 <form name="model_name_select" method='GET' class="form-inline">
-                    <select name="model_name_{{row}}_{{col}}" class="form-control">
+                    <select name="model_name_{{row}}_{{col}}" class="form-control" default="select a model">
+                        <option disabled selected>select a model</option>
                         {% for m in model_names %}
                             {% if m == model_plots[row][col]['name'] %}
                                 <option selected="selected" value="{{ m }}">{{ m }}</option>
