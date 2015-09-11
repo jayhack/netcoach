@@ -12,22 +12,12 @@ from bokeh.templates import RESOURCES
 from bokeh.util.string import encode_utf8
 
 from db import DBClient, ModelTracker, Model, Record
-from view import ModelView
+from view import PlotCell, AllCells
 
 app = flask.Flask(__name__)
 dbclient = DBClient()
-
-
-################################################################################
-####################[ INITIALIZE MODEL VIEWS ]##################################
-################################################################################
-
-nrows, ncols = 3, 2
-model_views = []
-for i in range(nrows):
-    model_views.append([])
-    for j in range(ncols):
-        model_views[i].append(ModelView())
+nrows = 3
+all_cells = AllCells(npages=1, nrows=3, ncols=2)
 
 
 ################################################################################
@@ -46,8 +36,7 @@ def add_record():
     mt = ModelTracker(args['model_name'])
     data = pickle.loads(args['data_pickled'])
     mt.add_record(args['record_type'], data)
-    print mt.get_records(args['record_type'])    
-    return 'successfully added record for model: {}'.format(args['model_name'])
+    return 'success'
 
 
 ################################################################################
@@ -56,7 +45,6 @@ def add_record():
 
 def parse_args(args):
     """parses args, generating (i, j, name) triplets"""
-    print args.items()
     for k, v in args.items():
         splits = k.split('_')
         row, col = int(splits[-2]), int(splits[-1])
@@ -66,7 +54,7 @@ def update_model_views(args):
     """updates model_view based on args"""
     for row, col, model_name in parse_args(args):
         mt = ModelTracker(model_name)
-        model_views[row][col].update(mt)
+        all_cells.update_cell(0, row, col, mt)
 
 
 @app.route("/")
@@ -87,9 +75,8 @@ def index():
     html = flask.render_template(
         'index.html',
         plot_resources=plot_resources,
-        model_views=model_views,
-        all_model_names=dbclient.get_model_names(),
-        nrows=nrows, ncols=ncols
+        all_cells=all_cells,
+        all_model_names=dbclient.get_model_names()
     )
     return encode_utf8(html)
 

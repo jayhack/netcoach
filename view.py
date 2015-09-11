@@ -9,11 +9,11 @@ from bokeh.resources import INLINE
 from bokeh.templates import RESOURCES
 from bokeh.util.string import encode_utf8
 
-class ModelView(object):
+class PlotCell(object):
 	"""
-	Class: Visualizer
-	=================
-	Produces plots of loss functions
+	Class: PlotCell
+	===============
+	Contains info for a single plot cell; has ability to create charts
 	"""
 	def __init__(self):
 		self.name = ''
@@ -43,5 +43,31 @@ class ModelView(object):
 
 		#=====[ Step 3: make script/div	]=====
 		self.script, self.div = components(self.fig, INLINE)
+
+
+class AllCells(object):
+	"""
+	Class: PageState
+	================
+	Contains full state of entire page
+	"""
+	def __init__(self, nrows=3, ncols=4, npages=10):
+		self.nrows = nrows
+		self.ncols = ncols
+		self.npages = npages
+		self._pages = []
+		for p in range(npages):
+			self._pages.append([])
+			for r in range(nrows):
+				self._pages[p].append([])
+				for c in range(ncols):
+					self._pages[p][r].append(PlotCell())
+
+	def update_cell(self, page, row, col, model_tracker):
+		self._pages[page][row][col].update(model_tracker)
+
+	def get_cell(self, page, row, col):
+		return self._pages[page][row][col]
+
 
 
