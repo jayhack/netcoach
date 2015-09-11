@@ -3,6 +3,7 @@ Module: server
 ==============
 Runs the actual server
 """
+import pickle
 import flask
 from bokeh.embed import components
 from bokeh.plotting import figure
@@ -10,13 +11,27 @@ from bokeh.resources import INLINE
 from bokeh.templates import RESOURCES
 from bokeh.util.string import encode_utf8
 
-from db import DBClient, Record
+from db import DBClient, ModelTracker, Model, Record
 
 app = flask.Flask(__name__)
 dbclient = DBClient()
 nrows, ncols = 3, 2
 plot_names = [[None, None], [None, None], [None, None]]
 
+
+@app.route('/add_model')
+def add_model():
+    args = flask.request.args
+    mt = ModelTracker(args['model_name'], args['comment'])
+    return 'success'
+
+@app.route('/add_record')
+def add_record():
+    args = flask.request.args
+    mt = ModelTracker(args['model_name'])
+    data = pickle.loads(args['data_pickled'])
+    mt.add_record(args['record_type'], data)
+    return 'successfully added record for model: {}'.format(args['model_name'])
 
 def make_figure(model_tracker):
     """makes and returns a figure"""
@@ -27,7 +42,6 @@ def make_figure(model_tracker):
                 plot_width=500,
                 plot_height=300
             )
-
     x = range(len(loss_records))
     fig.circle(x, loss_records['data'], legend="loss", color="red")
     fig.line(x, loss_records['data'], legend="loss", color="red")
@@ -57,7 +71,6 @@ def make_model_plot(model_name):
                 'script':script,
                 'div':div
             }
-
 
 
 @app.route("/")

@@ -7,7 +7,7 @@ from sqlalchemy.orm import sessionmaker
 import requests
 import pandas as pd
 
-engine = create_engine('sqlite:///data/test_db.sqlite', echo=False)
+engine = create_engine('sqlite:///data/records_db.sqlite', echo=False)
 Session = sessionmaker(bind=engine)
 
 ################################################################################
@@ -56,7 +56,6 @@ class ModelTracker(object):
     """
     def __init__(self, name, comment=''):
         #=====[ Step 1: db setup ]=====
-        self.engine = create_engine('sqlite:///:memory:', echo=False)
         self.session = Session()
 
         #=====[ Step 2: grab model ]=====
@@ -103,7 +102,6 @@ class DBClient(object):
     Allows you to stash records of loss, etc.
     """
     def __init__(self):
-        self.engine = create_engine('sqlite:///:memory:', echo=True)
         self.session = Session()
 
     ################################################################################
@@ -123,6 +121,7 @@ class DBClient(object):
 
     def get_model_tracker(self, name):
         """returns named model tracker or raises NameError"""
+        print "HERE"
         if not name in self.get_model_names():
             raise NameError("No such model: {}".format(name))
         return ModelTracker(name)
