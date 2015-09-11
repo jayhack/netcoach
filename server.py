@@ -12,13 +12,12 @@ from bokeh.templates import RESOURCES
 from bokeh.util.string import encode_utf8
 
 from db import DBClient, ModelTracker, Model, Record
-from view import PlotCell, AllCells
+from mvcmodel import MVCModel
 
 app = flask.Flask(__name__)
 dbclient = DBClient()
 nrows = 3
-all_cells = AllCells(npages=1, nrows=3, ncols=2)
-
+mvc_model = MVCModel(npages=1, nrows=3, ncols=2)
 
 ################################################################################
 ####################[ REST API ]################################################
@@ -54,7 +53,7 @@ def update_model_views(args):
     """updates model_view based on args"""
     for row, col, model_name in parse_args(args):
         mt = ModelTracker(model_name)
-        all_cells.update_cell(0, row, col, mt)
+        mvc_model.update_cell(0, row, col, mt)
 
 
 @app.route("/")
@@ -75,7 +74,7 @@ def index():
     html = flask.render_template(
         'index.html',
         plot_resources=plot_resources,
-        all_cells=all_cells,
+        mvc_model=mvc_model,
         all_model_names=dbclient.get_model_names()
     )
     return encode_utf8(html)

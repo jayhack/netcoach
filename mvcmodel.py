@@ -45,11 +45,11 @@ class PlotCell(object):
 		self.script, self.div = components(self.fig, INLINE)
 
 
-class AllCells(object):
+class MVCModel(object):
 	"""
-	Class: PageState
-	================
-	Contains full state of entire page
+	Class: MVCModel
+	===============
+	Contains full state of entire website
 	"""
 	def __init__(self, nrows=3, ncols=4, npages=10):
 		self.nrows = nrows
