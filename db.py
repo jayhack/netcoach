@@ -71,9 +71,10 @@ class ModelTracker(object):
         self.name = self.model.name
         self.comment = self.model.comment
 
-    def add_record(self, data, record_type):
+    def add_record(self, record_type, data):
         ts = datetime.datetime.now()
         r = Record(name=self.name, record_type=record_type, data=data, ts=ts)
+        print self.name, record_type, data
         self.session.add(r)
         self.session.commit()
         return r
@@ -121,7 +122,6 @@ class DBClient(object):
 
     def get_model_tracker(self, name):
         """returns named model tracker or raises NameError"""
-        print "HERE"
         if not name in self.get_model_names():
             raise NameError("No such model: {}".format(name))
         return ModelTracker(name)

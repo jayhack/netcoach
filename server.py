@@ -31,6 +31,7 @@ def add_record():
     mt = ModelTracker(args['model_name'])
     data = pickle.loads(args['data_pickled'])
     mt.add_record(args['record_type'], data)
+    print mt.get_records(args['record_type'])    
     return 'successfully added record for model: {}'.format(args['model_name'])
 
 def make_figure(model_tracker):
@@ -47,7 +48,6 @@ def make_figure(model_tracker):
     fig.line(x, loss_records['data'], legend="loss", color="red")
     fig.circle(x, acc_records['data'], legend="accuracy", color="green")
     fig.line(x, acc_records['data'], legend="accuracy", color="green")
-
     return fig
 
 
