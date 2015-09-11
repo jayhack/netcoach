@@ -12,12 +12,27 @@ from bokeh.templates import RESOURCES
 from bokeh.util.string import encode_utf8
 
 from db import DBClient, ModelTracker, Model, Record
+from view import ModelView
 
 app = flask.Flask(__name__)
 dbclient = DBClient()
-nrows, ncols = 3, 2
-plot_names = [[None, None], [None, None], [None, None]]
 
+
+################################################################################
+####################[ INITIALIZE MODEL VIEWS ]##################################
+################################################################################
+
+nrows, ncols = 3, 2
+model_views = []
+for i in range(nrows):
+    model_views.append([])
+    for j in range(ncols):
+        model_views[i].append(ModelView())
+
+
+################################################################################
+####################[ REST API ]################################################
+################################################################################
 
 @app.route('/add_model')
 def add_model():
@@ -34,78 +49,46 @@ def add_record():
     print mt.get_records(args['record_type'])    
     return 'successfully added record for model: {}'.format(args['model_name'])
 
-def make_figure(model_tracker):
-    """makes and returns a figure"""
-    loss_records = model_tracker.get_records('loss')
-    acc_records = model_tracker.get_records('accuracy')
-    fig = figure(
-                tools='pan,wheel_zoom,reset',
-                plot_width=500,
-                plot_height=300
-            )
-    x = range(len(loss_records))
-    fig.circle(x, loss_records['data'], legend="loss", color="red")
-    fig.line(x, loss_records['data'], legend="loss", color="red")
-    fig.circle(x, acc_records['data'], legend="accuracy", color="green")
-    fig.line(x, acc_records['data'], legend="accuracy", color="green")
-    return fig
 
+################################################################################
+####################[ INDEX ]###################################################
+################################################################################
 
-def make_model_plot(model_name):
-    """returns an object that has all plot fields filled"""
-    if not model_name is None:
-        mt = dbclient.get_model_tracker(model_name)
-        fig = make_figure(mt)
-        name = mt.name
-        comment = mt.comment
-    else:
-        fig = figure(tools='pan,wheel_zoom,reset', plot_width=500, plot_height=300)
-        name = ''
-        comment = ''
-
-    script, div = components(fig, INLINE)
-    return {
-                'fig':fig,
-                'name':name,
-                'comment':comment,
-                'script':script,
-                'div':div
-            }
-
-
-@app.route("/")
-def plot():
-    """Grabs all active models and plots them"""
-
-    #=====[ Step 1: parse args ]=====
-    args = flask.request.args
+def parse_args(args):
+    """parses args, generating (i, j, name) triplets"""
+    print args.items()
     for k, v in args.items():
         splits = k.split('_')
         row, col = int(splits[-2]), int(splits[-1])
-        plot_names[row][col] = v
+        yield row, col, v
 
-    #=====[ Step 2: assemble plots ]=====
-    model_plots = [[None, None], [None, None], [None, None]]
-    for i in range(nrows):
-        for j in range(ncols):
-                model_plots[i][j] = make_model_plot(plot_names[i][j])
+def update_model_views(args):
+    """updates model_view based on args"""
+    for row, col, model_name in parse_args(args):
+        mt = ModelTracker(model_name)
+        model_views[row][col].update(mt)
 
 
-    #=====[ Step 3: make templates ]=====
-    # Configure resources to include BokehJS inline in the document.
-    # For more details see:
-    #   http://bokeh.pydata.org/en/latest/docs/reference/resources_embedding.html#module-bokeh.resources
+@app.route("/")
+def index():
+    """plots all model views"""
+    #=====[ Step 1: update model views ]=====
+    update_model_views(flask.request.args)
+
+    #=====[ Step 2: get plot resources ]=====
     plot_resources = RESOURCES.render(
         js_raw=INLINE.js_raw + ['js'],
         css_raw=INLINE.css_raw + ['css'],
         js_files=INLINE.js_files + ['js'],
         css_files=INLINE.css_files + ['css'],
     )
+
+    #=====[ Step 3: render templates ]=====
     html = flask.render_template(
         'index.html',
         plot_resources=plot_resources,
-        model_plots=model_plots,
-        model_names=dbclient.get_model_names(),
+        model_views=model_views,
+        all_model_names=dbclient.get_model_names(),
         nrows=nrows, ncols=ncols
     )
     return encode_utf8(html)

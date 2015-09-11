@@ -27,7 +27,7 @@
 
     {% for i in range(nrows) %}
         {% for j in range(ncols) %}
-            {{ model_plots[i][j]['script']|indent(4)|safe }}
+            {{ model_views[i][j]['script']|indent(4)|safe }}
         {% endfor %}
     {% endfor %}
 
@@ -79,8 +79,8 @@
                 <form name="model_name_select" method='GET' class="form-inline">
                     <select name="model_name_{{row}}_{{col}}" class="form-control" default="select a model">
                         <option disabled selected>select a model</option>
-                        {% for m in model_names %}
-                            {% if m == model_plots[row][col]['name'] %}
+                        {% for m in all_model_names %}
+                            {% if m == model_views[row][col]['name'] %}
                                 <option selected="selected" value="{{ m }}">{{ m }}</option>
                             {% else %}
                                 <option value="{{ m }}">{{ m }}</option>
@@ -89,11 +89,11 @@
                     </select>
                     <button class="btn btn-default" type="submit">update</button>
                 </form>
-                {{ model_plots[row][col]['div']|indent(4)|safe }}
+                {{ model_views[row][col]['div']|indent(4)|safe }}
                 <h3>
-                    <a href="#">{{model_plots[row][col]['name']}}</a>
+                    <a href="#">{{model_views[row][col]['name']}}</a>
                 </h3>
-                <p>{{model_plots[row][col]['comment']}}</p>
+                <p>{{model_views[row][col]['comment']}}</p>
             </div>
 
         {% endfor %}
