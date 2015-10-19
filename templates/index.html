@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>NetCoach - Visualizing Live Neural Net Training</title>
+    <title>NetCoach - Visualizing Neural Net Training</title>
 
     <!-- Bootstrap Core CSS -->
     <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}", rel="stylesheet">
@@ -17,12 +17,7 @@
     <!-- Custom CSS -->
     <link href="{{ url_for('static', filename='css/2-col-portfolio.css') }}", rel="stylesheet">
 
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
+    <!-- React.js, jQuery and Bootstrap -->
     {{ plot_resources|indent(4)|safe }}
 
     {% for i in range(nrows) %}
@@ -139,7 +134,7 @@
         <footer>
             <div class="row">
                 <div class="col-lg-12">
-                    <p>Copyright &copy; Your Website 2014</p>
+                    <p>NetCoach 2015</p>
                 </div>
             </div>
             <!-- /.row -->
@@ -147,12 +142,6 @@
 
     </div>
     <!-- /.container -->
-
-    <!-- jQuery -->
-    <script src="{{ url_for('static', filename='js/jquery.js') }}"></script>
-
-    <!-- Bootstrap Core JavaScript -->
-    <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
 
 </body>
 
