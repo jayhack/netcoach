@@ -3,20 +3,25 @@ Module: server
 ==============
 Runs the actual server
 """
+import json
 import flask
+from flask import request
 from bokeh.embed import components
 from bokeh.plotting import figure
 from bokeh.resources import INLINE
 from bokeh.templates import RESOURCES
 from bokeh.util.string import encode_utf8
 
-from db import DBClient, Record
+from db import DBClient, ModelTracker, Record
 
 app = flask.Flask(__name__)
 dbclient = DBClient()
 nrows, ncols = 3, 2
 plot_names = [[None, None], [None, None], [None, None]]
 
+############################################################
+##########[ UTILS    ]######################################
+############################################################
 
 def make_figure(model_tracker):
     """makes and returns a figure"""
@@ -60,6 +65,49 @@ def make_model_plot(model_name):
 
 
 
+############################################################
+##########[ HOOKS    ]######################################
+############################################################
+
+@app.route("/add_model", methods=['GET'])
+def add_model():
+    """
+    Hook: add_model
+    ---------------
+    Adds a model to the DB; does nothing if model already exists.
+
+    Incoming JSON format:
+        {'name':'...', 'comment':'...'}
+    """
+    data = json.loads(request.data)
+    mt = ModelTracker(data['name'], data['comment'])
+    return 'success'
+
+
+@app.route("/add_record", methods=['GET'])
+def add_record():
+    """
+    Hook: add_record
+    ----------------
+    Adds a record for the specified model.
+
+    Incoming JSON format:
+        {
+            'model_name':{'field_name':'value_name'},
+            ...
+        }
+    """
+    data = json.loads(request.data)
+
+
+    record_data = request.get_json()
+    for name, data in record_data.items():
+        model_tracker = dbclient.get_model_tracker(name)
+        for field, value in data.items():            
+            model_tracker.add_record(value, field)
+    return 'success'
+
+
 @app.route("/")
 def plot():
     """Grabs all active models and plots them"""
@@ -76,7 +124,6 @@ def plot():
     for i in range(nrows):
         for j in range(ncols):
                 model_plots[i][j] = make_model_plot(plot_names[i][j])
-
 
     #=====[ Step 3: make templates ]=====
     # Configure resources to include BokehJS inline in the document.
