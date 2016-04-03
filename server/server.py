@@ -34,6 +34,18 @@ def get_series_list():
     """
     return json.dumps(["series_1", "series_2", "series_3"])
 
+@app.route("/get_plot_data", methods=['GET', 'POST'])
+def get_plot_data():
+    """
+    Hook: get_plot_data
+    -------------------
+    Returns plot data for a specified series_id
+    """
+    return json.dumps([{
+        'x': ['2013-10-04 22:23:00', '2013-11-04 22:23:00', '2013-12-04 22:23:00'],
+        'y': [1, 3, 6],
+    }])
+
 @app.route("/add_model", methods=['GET'])
 def add_model():
     """

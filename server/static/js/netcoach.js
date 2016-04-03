@@ -13,7 +13,9 @@
  * Contains all global information
  */
 var globalState = {
-    seriesList: [] //contains ids of all series available to plot
+    seriesList: [], //contains ids of all series available to plot
+    plotData:[], //contains current plot data
+    plot:NaN
 }
 
 /* Function: initializer
@@ -21,27 +23,8 @@ var globalState = {
  * Initializes everything when the DOM loads
  */
 $(document).ready(function() {
-
-    //=====[ Step 1: Initialize Graph ]=====
     refreshSeriesList();
-
-
-   var trace1 = {
-      x: [1, 2, 3, 4],
-      y: [10, 15, 13, 17],
-      type: 'scatter'
-    };
-
-    var trace2 = {
-      x: [1, 2, 3, 4],
-      y: [16, 5, 11, 9],
-      type: 'scatter'
-    };
-
-    var data = [trace1, trace2];
-
-    Plotly.newPlot('mainGraph', data);
-
+    refreshPlot();
 })
 
 
@@ -68,11 +51,10 @@ var refreshSeriesList = function() {
     })
 }
 
-/* Function: getPlotData
- * ---------------------
+/* Function: refreshPlotData
+ * -------------------------
  * Given a plot id, returns all data to be plotted
- * Formatted as
- * [{'ts':timestamp, 'val':value}]
+ * Should be called every second or so once the plot is up
  */
 var refreshPlotData = function(plot_id) {
     return $.ajax({
@@ -81,13 +63,22 @@ var refreshPlotData = function(plot_id) {
         contentType:"application/json; charset=utf-8",
         dataType:"json",
         success: function(data) {
-            alert("");
+            data.type = 'scatter';
+            globalState.plotData = data;
+        },
+        error: function() {
+            alert("Error: could not refresh plot data");
         }
     })
 }
 
 /* Function: refreshPlot
  * ---------------------
- * NotImplementedError
+ * Updates the graph with new data
  */
-
+var refreshPlot = function() {
+    var graphData = globalState.plotData;
+    graphData.type = 'scatter';
+    debugger;
+    Plotly.newPlot('mainGraph', graphData);
+}
