@@ -47,21 +47,6 @@ def get_series():
     }
     return json.dumps(data)
 
-@app.route("/add_series", methods=['GET'])
-def add_series():
-    """
-    Hook: add_series
-    ----------------
-    Adds a series to the DB; does nothing if model already exists.
-
-    Incoming JSON format:
-        {'name':'...', 'comment':'...'}
-    """
-    series_name = request.args.get('series_name')
-    if not series_name in dbclient.get_series_names():
-        dbclient.add_series(series_name)
-    return 'Success'
-
 @app.route("/add_record", methods=['GET'])
 def add_record():
     """
@@ -72,6 +57,9 @@ def add_record():
     series_name = request.args.get('series_name')
     ts = request.args.get('ts')
     val = request.args.get('val')
+    if not series_name in dbclient.get_series_names():
+        dbclient.add_series(series_name)
+    print series_name, val, ts
     dbclient.add_record(series_name, val, ts)
     return 'Success'
 

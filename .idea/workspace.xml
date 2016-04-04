@@ -2,13 +2,14 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="a56ab537-d960-42c0-9818-5c28b765d98c" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/server/data/netcoach.sqlite" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/server/data/netcoach.sqlite-journal" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Client.ipynb" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/server/.ipynb_checkpoints/Database-checkpoint.ipynb" afterPath="$PROJECT_DIR$/server/.ipynb_checkpoints/Database-checkpoint.ipynb" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/server/Database.ipynb" afterPath="$PROJECT_DIR$/server/Database.ipynb" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/server/db.py" afterPath="$PROJECT_DIR$/server/db.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/client/client.py" afterPath="$PROJECT_DIR$/client/client.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/server/templates/index.html" afterPath="$PROJECT_DIR$/server/templates/index.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/server/static/js/netcoach.js" afterPath="$PROJECT_DIR$/server/static/js/netcoach.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/server/server.py" afterPath="$PROJECT_DIR$/server/server.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="netcoach.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -29,11 +30,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="server.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="server.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/server/server.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.28428927">
-              <caret line="47" column="25" selection-start-line="47" selection-start-column="25" selection-end-line="47" selection-end-column="25" />
+            <state vertical-scroll-proportion="0.0">
+              <caret line="61" column="29" selection-start-line="61" selection-start-column="29" selection-end-line="61" selection-end-column="29" />
               <folding>
                 <element signature="e#0#11#0" expanded="true" />
               </folding>
@@ -41,12 +42,14 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="index.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/server/templates/index.html">
+      <file leaf-file-name="client.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/client/client.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-14.041667">
-              <caret line="65" column="46" selection-start-line="65" selection-start-column="46" selection-end-line="65" selection-end-column="46" />
-              <folding />
+            <state vertical-scroll-proportion="0.52369076">
+              <caret line="28" column="40" selection-start-line="28" selection-start-column="40" selection-end-line="28" selection-end-column="40" />
+              <folding>
+                <element signature="e#100#129#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -55,7 +58,7 @@
         <entry file="file://$PROJECT_DIR$/server/static/js/netcoach.js">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="19" column="16" selection-start-line="19" selection-start-column="16" selection-end-line="19" selection-end-column="16" />
+              <caret line="42" column="12" selection-start-line="42" selection-start-column="12" selection-end-line="42" selection-end-column="12" />
               <folding />
             </state>
           </provider>
@@ -72,9 +75,10 @@
         <option value="$PROJECT_DIR$/.gitignore" />
         <option value="$PROJECT_DIR$/README.md" />
         <option value="$PROJECT_DIR$/server/db.py" />
-        <option value="$PROJECT_DIR$/server/server.py" />
         <option value="$PROJECT_DIR$/server/static/js/netcoach.js" />
         <option value="$PROJECT_DIR$/server/templates/index.html" />
+        <option value="$PROJECT_DIR$/server/server.py" />
+        <option value="$PROJECT_DIR$/client/client.py" />
       </list>
     </option>
   </component>
@@ -157,25 +161,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="server" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="netcoach" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="netcoach" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="server" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="templates" />
+              <option name="myItemId" value="client" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -499,14 +485,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/server/static/js/netcoach.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="19" column="16" selection-start-line="19" selection-start-column="16" selection-end-line="19" selection-end-column="16" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/server/db.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.8690773">
@@ -519,18 +497,38 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/server/templates/index.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-14.041667">
-          <caret line="65" column="46" selection-start-line="65" selection-start-column="46" selection-end-line="65" selection-end-column="46" />
+        <state vertical-scroll-proportion="0.68333334">
+          <caret line="41" column="76" selection-start-line="41" selection-start-column="76" selection-end-line="41" selection-end-column="76" />
+          <folding>
+            <element signature="n#style#0;n#div#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/server/static/js/netcoach.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="42" column="12" selection-start-line="42" selection-start-column="12" selection-end-line="42" selection-end-column="12" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/server/server.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.28428927">
-          <caret line="47" column="25" selection-start-line="47" selection-start-column="25" selection-end-line="47" selection-end-column="25" />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="61" column="29" selection-start-line="61" selection-start-column="29" selection-end-line="61" selection-end-column="29" />
           <folding>
             <element signature="e#0#11#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/client/client.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.52369076">
+          <caret line="28" column="40" selection-start-line="28" selection-start-column="40" selection-end-line="28" selection-end-column="40" />
+          <folding>
+            <element signature="e#100#129#0" expanded="true" />
           </folding>
         </state>
       </provider>

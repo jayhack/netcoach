@@ -15,6 +15,7 @@
 var globalState = {
     seriesList: [], //contains ids of all series available to plot
     plotData:[], //contains current plot data
+    seriesName:NaN,
     plotLayout: {
         autosize: false,
         width: 1000,
@@ -36,6 +37,10 @@ var globalState = {
 $(document).ready(function() {
     refreshSeriesList();
     refreshPlotData('char_rnn_32');
+    window.setInterval(function(){
+        refreshSeriesList();
+        refreshPlotData(globalState.seriesName);
+    }, 1000);
 })
 
 
@@ -77,6 +82,7 @@ var refreshSeriesList = function() {
  * Should be called every second or so once the plot is up
  */
 var refreshPlotData = function(series_name) {
+    globalState.seriesName = series_name;
     return $.ajax({
         type:'GET',
         url:'/get_series',
