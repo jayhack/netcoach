@@ -15,7 +15,18 @@
 var globalState = {
     seriesList: [], //contains ids of all series available to plot
     plotData:[], //contains current plot data
-    plot:NaN
+    plotLayout: {
+        autosize: false,
+        width: 1000,
+        height: 500,
+        margin: {
+            l: 50,
+            r: 50,
+            b: 100,
+            t: 100,
+            pad: 4
+        },
+    },
 }
 
 /* Function: initializer
@@ -24,7 +35,7 @@ var globalState = {
  */
 $(document).ready(function() {
     refreshSeriesList();
-    refreshPlot();
+    refreshPlotData('char_rnn_32');
 })
 
 
@@ -44,6 +55,15 @@ var refreshSeriesList = function() {
         dataType:"json",
         success: function(data) {
             globalState.seriesList = data;
+            $("#series-list").empty();
+            globalState.seriesList.map(function(series_name) {
+                var li = $("<li>", {
+                                    id:series_name,
+                                    text:series_name,
+                                    click:function() {refreshPlotData(series_name);}
+                                    });
+                $("#series-list").append(li);
+            });
         },
         error: function() {
             alert("Error: could not refresh available series");
@@ -56,29 +76,21 @@ var refreshSeriesList = function() {
  * Given a plot id, returns all data to be plotted
  * Should be called every second or so once the plot is up
  */
-var refreshPlotData = function(plot_id) {
+var refreshPlotData = function(series_name) {
     return $.ajax({
-        type:'POST',
-        url:'/get_plot_data',
+        type:'GET',
+        url:'/get_series',
+        data:{'series_name':series_name},
         contentType:"application/json; charset=utf-8",
         dataType:"json",
         success: function(data) {
             data.type = 'scatter';
             globalState.plotData = data;
+            data.style = 'scatter'
+            Plotly.newPlot('main-graph', [globalState.plotData], globalState.plotLayout);
         },
         error: function() {
             alert("Error: could not refresh plot data");
         }
     })
-}
-
-/* Function: refreshPlot
- * ---------------------
- * Updates the graph with new data
- */
-var refreshPlot = function() {
-    var graphData = globalState.plotData;
-    graphData.type = 'scatter';
-    debugger;
-    Plotly.newPlot('mainGraph', graphData);
 }

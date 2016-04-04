@@ -2,10 +2,10 @@ import json
 import flask
 from flask import request
 from flask import render_template
-#from db import DBClient, ModelTracker
+from db import DBClient
 
 app = flask.Flask(__name__, static_url_path='/static')
-#dbclient = DBClient()
+dbclient = DBClient(data_dir='./data/')
 
 ######################################################################
 ##################[ STATIC ]##########################################
@@ -13,12 +13,10 @@ app = flask.Flask(__name__, static_url_path='/static')
 
 @app.route('/js/<path:path>')
 def send_js(path):
-    """sens js"""
     return app.send_static_file('js/{}'.format(path))
 
 @app.route('/css/<path:path>')
 def send_css(path):
-    """sends css"""
     return app.send_static_file('css/{}'.format(path))
 
 ######################################################################
@@ -32,34 +30,37 @@ def get_series_list():
     ---------------------
     Returns list of available series as a list of strings
     """
-    return json.dumps(["series_1", "series_2", "series_3"])
+    return json.dumps(dbclient.get_series_names())
 
-@app.route("/get_plot_data", methods=['GET', 'POST'])
-def get_plot_data():
+@app.route("/get_series", methods=['GET'])
+def get_series():
     """
     Hook: get_plot_data
     -------------------
     Returns plot data for a specified series_id
     """
-    return json.dumps([{
-        'x': ['2013-10-04 22:23:00', '2013-11-04 22:23:00', '2013-12-04 22:23:00'],
-        'y': [1, 3, 6],
-    }])
+    series_name = request.args.get('series_name')
+    records = dbclient.get_series(series_name)
+    data = {
+        'x':[r['x'] for r in records],
+        'y':[r['y'] for r in records]
+    }
+    return json.dumps(data)
 
-@app.route("/add_model", methods=['GET'])
-def add_model():
+@app.route("/add_series", methods=['GET'])
+def add_series():
     """
-    Hook: add_model
-    ---------------
-    Adds a model to the DB; does nothing if model already exists.
+    Hook: add_series
+    ----------------
+    Adds a series to the DB; does nothing if model already exists.
 
     Incoming JSON format:
         {'name':'...', 'comment':'...'}
     """
-    data = json.loads(request.data)
-    mt = ModelTracker(data['name'], data['comment'])
-    return 'success'
-
+    series_name = request.args.get('series_name')
+    if not series_name in dbclient.get_series_names():
+        dbclient.add_series(series_name)
+    return 'Success'
 
 @app.route("/add_record", methods=['GET'])
 def add_record():
@@ -67,21 +68,12 @@ def add_record():
     Hook: add_record
     ----------------
     Adds a record for the specified model.
-
-    Incoming JSON format:
-        {
-            'model_name':{'field_name':'value_name'},
-            ...
-        }
     """
-    data = json.loads(request.data)
-    record_data = request.get_json()
-    for name, data in record_data.items():
-        model_tracker = dbclient.get_model_tracker(name)
-        for field, value in data.items():            
-            model_tracker.add_record(value, field)
-    return 'success'
-
+    series_name = request.args.get('series_name')
+    ts = request.args.get('ts')
+    val = request.args.get('val')
+    dbclient.add_record(series_name, val, ts)
+    return 'Success'
 
 @app.route("/")
 def index():

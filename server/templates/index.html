@@ -63,7 +63,17 @@
 
         <!-- Graphs -->
       <div class="row">
-          <div id="mainGraph" style="width: 480px; height: 400px;"><!-- Plotly chart will be drawn inside this DIV --></div>
+          <div id="main-graph" style="width: 1000px; height: 500px;"><!-- Plotly chart will be drawn inside this DIV --></div>
+        </div>
+        <div class="row">
+            <div class="dropdown">
+                  <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Select a Series<span class="caret"></span></button>
+                  <ul class="dropdown-menu" id="series-list">
+                    <li><a href="#">HTML</a></li>
+                    <li><a href="#">CSS</a></li>
+                    <li><a href="#">JavaScript</a></li>
+                  </ul>
+            </div>
         </div>
 
         <!-- Footer -->
